@@ -1,0 +1,23 @@
+drop table history;
+drop table payment;
+drop table contract;
+drop table rental;
+drop table booking;
+drop table maintenance;
+drop table image;
+drop table vehicle;
+drop table user;
+drop table drive_license;
+drop table citizen_identify;
+
+describe history;
+describe payment;
+describe contract;
+describe rental;
+describe booking;
+describe maintenance;
+describe image;
+describe vehicle;
+describe user;
+describe drive_license;
+describe citizen_identify;

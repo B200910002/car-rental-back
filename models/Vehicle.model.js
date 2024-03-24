@@ -1,34 +1,44 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const Sequelize = require('sequelize');
+const { sequelize } = require('../config/database');
 
-const vehicleSchema = new Schema({
-    numberPlate: {
-        type: String,
-        required: true,
+const Vehicle = sequelize.define('vehicle', {
+    plate_number: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
     },
-    mark: {
-        type: String,
-        required: true,
+    model: {
+        type: Sequelize.STRING,
+        allowNull: false,
     },
-    factory: {
-        type: String,
-        required: true,
+    make: {
+        type: Sequelize.STRING,
+        allowNull: false,
     },
-    color: {
-        type: String,
-        required: true,
+    year: {
+        type: Sequelize.DATE,
+        allowNull: false,
     },
-    insurance: {
-        type: String,
-        required: true,
+    vehicle_price: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
     },
-    cost: {
-        type: String,
-        required: true,
+    price_per_day: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
     },
-}, { timestamps: true });
+    kilometer_per_Day: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    price_exceed_per_kilometer: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+    },
+    available: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+    },
+}, { freezeTableName: true, tableName: 'vehicle' });
 
-module.exports = {
-    Vehicle: mongoose.model("Vehicle", vehicleSchema),
-    vehicleSchema
-}
+module.exports = { Vehicle };

@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/middleware');
-const { User, userSchema } = require('../models/User.model');
+const { User } = require('../models');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 /* GET users listing. */
-router.get('/', protect, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
-    const users = await User.find();
+    const users = await User.findAll();
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -25,8 +27,18 @@ router.get('/my-account', protect, async (req, res, next) => {
 /* POST users listing. */
 router.post('/register', async (req, res, next) => {
   try {
-    const { firstName, lastName, email, phone, password } = req.body;
-    const token = await User.register(firstName, lastName, email, phone, password);
+    const { email, password } = req.body;
+    // const token = await User.register(firstName, lastName, email, phone, password);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ email: email, password: hashedPassword });
+    const token = await jwt.sign(
+      {
+        id: user.id,
+        email: user?.email
+      },
+      process.env.SECRET_TOKEN,
+      { expiresIn: "1d" }
+    );
     res.status(201).json({ token });
   } catch (e) {
     res.status(401).json({ error: e.message });
@@ -36,8 +48,25 @@ router.post('/register', async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const token = await User.login(email, password);
-    res.status(200).json({ token });
+    const user = await User.findOne({ where: { email: email } });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (user && isPasswordValid) {
+      const token = jwt.sign(
+        {
+          id: user?.id,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
+          email: user?.email,
+          phone: user?.phone,
+        },
+        process.env.SECRET_TOKEN,
+        { expiresIn: "1d" }
+      );
+
+      res.status(200).json({ token });
+    } else {
+      throw Error("Incorrect email or password");
+    }
   } catch (e) {
     res.status(401).json({ error: e.message });
   }

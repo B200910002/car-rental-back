@@ -14,7 +14,7 @@ exports.protect = async (req, res, next) => {
         }
 
         const verified = jwt.verify(token, process.env.SECRET_TOKEN);
-        const user = await User.findById(verified._id);
+        const user = await User.findByPk(verified.id);
 
         if (!user) {
             throw new Error("Token not found or token has expired, please login");
