@@ -4,7 +4,7 @@ const { protect } = require('../middleware/middleware');
 const { Vehicle } = require('../models');
 
 /* GET vehicle listing. */
-router.get('/', protect, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
         const vehicles = await Vehicle.findAll();
         res.status(200).json(vehicles);
@@ -35,7 +35,18 @@ router.get('/available-vehicles', async (req, res, next) => {
 router.post('/', protect, async (req, res, next) => {
     try {
         const { plate_number, model, make, year, vehicle_price } = req.body;
-        const vehicle = await Vehicle.create({plate_number, model, make, year, vehicle_price});
+        const vehicle = await Vehicle.create({ plate_number, model, make, year, vehicle_price, owner_id: req.user.id });
+        res.status(200).json(vehicle);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+/* POST vehicle listing. */
+router.post('/', protect, async (req, res, next) => {
+    try {
+        const { plate_number, model, make, year, vehicle_price } = req.body;
+        const vehicle = await Vehicle.create({ plate_number, model, make, year, vehicle_price, owner_id: req.user.id });
         res.status(200).json(vehicle);
     } catch (error) {
         res.status(400).json({ error: error.message });

@@ -27,11 +27,10 @@ router.get('/my-account', protect, async (req, res, next) => {
 /* POST users listing. */
 router.post('/register', async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    // const token = await User.register(firstName, lastName, email, phone, password);
+    const { first_name, last_name, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ email: email, password: hashedPassword });
-    const token = await jwt.sign(
+    const user = await User.create({ first_name: first_name, last_name: last_name, email: email, password: hashedPassword });
+    const token = jwt.sign(
       {
         id: user.id,
         email: user?.email

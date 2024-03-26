@@ -21,23 +21,23 @@ const Vehicle = sequelize.define('vehicle', {
     },
     vehicle_price: {
         type: Sequelize.DOUBLE,
-        allowNull: false,
+        allowNull: true,
     },
     price_per_day: {
         type: Sequelize.DOUBLE,
-        allowNull: false,
+        allowNull: true,
     },
     kilometer_per_Day: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     price_exceed_per_kilometer: {
         type: Sequelize.DOUBLE,
-        allowNull: false,
+        allowNull: true,
     },
     available: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
     },
 }, { freezeTableName: true, tableName: 'vehicle' });
 
