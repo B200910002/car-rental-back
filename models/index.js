@@ -1,8 +1,8 @@
 const { CitizenIdentify } = require('./citizen_identify.model');
 const { DriveLicense } = require('./drive_lisence.model');
-const { User } = require('./User.model');
-const { Vehicle } = require('./Vehicle.model');
-const { Image } = require('./Image.model');
+const { User } = require('./user.model');
+const { Vehicle } = require('./vehicle.model');
+const { Image } = require('./image.model');
 const { Maintenance } = require('./maintenance.model');
 const { Booking } = require('./booking.model');
 const { Rental } = require('./rental.model');

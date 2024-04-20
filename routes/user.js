@@ -53,10 +53,13 @@ router.post("/login", async (req, res, next) => {
       const token = jwt.sign(
         {
           id: user?.id,
-          firstName: user?.firstName,
-          lastName: user?.lastName,
+          first_name: user?.first_name,
+          last_name: user?.last_name,
+          phone_number: user?.phone_number,
           email: user?.email,
-          phone: user?.phone,
+          signature: user?.signature,
+          profile_image: user?.profile_image,
+          role: user?.role,
         },
         process.env.SECRET_TOKEN,
         { expiresIn: "1d" }
@@ -75,11 +78,11 @@ router.post("/login", async (req, res, next) => {
 router.put("/edit/:userId", protect, async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { firstName, lastName, profile, email, phone, about } = req.body;
+    const { first_name, last_name, profile_image, phone_number, email, about } = req.body;
 
     const user = await User.findByIdAndUpdate(
       userId,
-      { firstName, lastName, profile, email, phone, about },
+      { first_name, last_name, profile_image, phone_number, email, about },
       { new: true }
     );
     res.status(200).json(user);

@@ -13,6 +13,7 @@ const Booking = sequelize.define('booking', {
     status: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: 'PENDING'
     },
 }, { freezeTableName: true, tableName: 'booking' });
 

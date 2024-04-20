@@ -25,6 +25,15 @@ const User = sequelize.define('user', {
         type: Sequelize.BLOB,
         allowNull: true,
     },
+    profile_image: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    role: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'USER',
+    },
     password: {
         type: Sequelize.STRING,
         allowNull: false,
