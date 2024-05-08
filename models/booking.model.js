@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../config/database');
+const { User } = require('./User.model');
 
 const Booking = sequelize.define('booking', {
     start_at: {
@@ -13,7 +14,7 @@ const Booking = sequelize.define('booking', {
     status: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: 'PENDING'
+        defaultValue: 'PENDING',
     },
 }, { freezeTableName: true, tableName: 'booking' });
 

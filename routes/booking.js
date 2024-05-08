@@ -15,7 +15,7 @@ router.get('/', async (req, res, next) => {
 router.get('/by-status/:status', async (req, res, next) => {
     try {
         const { status } = req.params;
-        const bookings = Booking.findAll({ where: { status: status } });
+        const bookings = await Booking.findAll({ where: { status: status } });
         res.status(200).json(bookings);
     } catch (e) {
         res.status(400).json({ error: e.message });
@@ -25,13 +25,13 @@ router.get('/by-status/:status', async (req, res, next) => {
 router.post('/', protect, async (req, res, next) => {
     try {
         const { start_at, end_at, vehicle_id } = req.body;
-        const vehicleIsAvailable = await Vehicle.findByPk(vehicle_id);
+        const vehicle = await Vehicle.findByPk(vehicle_id);
         const booking = await Booking.create(
             {
                 start_at: start_at,
                 end_at: end_at,
                 renter_id: req.user.id,
-                vehicle_id: vehicle_id
+                vehicle_id: vehicle.dataValues.id
             }
         );
         res.status(200).json(booking);
