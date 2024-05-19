@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../config/database');
-const { User } = require('./User.model');
+const { User } = require('./user.model');
 
 const Booking = sequelize.define('booking', {
     start_at: {

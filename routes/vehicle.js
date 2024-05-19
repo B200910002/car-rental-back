@@ -9,9 +9,21 @@ router.get('/', async (req, res, next) => {
         const vehicles = await Vehicle.findAll();
         for (let vehicle of vehicles) {
             const image = await Image.findOne({ where: { vehicle_id: vehicle.id } });
-            vehicle.dataValues.image = image?.dataValues.image_url;
+            vehicle.dataValues.image = image?.dataValues.image_url ?? null;
         }
         res.status(200).json(vehicles);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+router.get('/:vehicleId', async (req, res, next) => {
+    try {
+        const { vehicleId } = req.params;
+        const vehicle = await Vehicle.findByPk(vehicleId);
+        const image = await Image.findOne({ where: { vehicle_id: vehicle.id } });
+        vehicle.dataValues.image = image?.dataValues.image_url ?? null;
+        res.status(200).json(vehicle);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -58,11 +70,31 @@ router.post('/', protect, async (req, res, next) => {
 router.patch('/:vehicleId', protect, async (req, res, next) => {
     try {
         const { vehicleId } = req.params;
-        const { plate_number, model, make, year, vehicle_price } = req.body;
+        const {
+            plate_number,
+            model,
+            make,
+            year,
+            vehicle_price,
+            price_per_day,
+            kilometer_per_Day,
+            price_exceed_per_kilometer,
+            available
+        } = req.body;
 
         const vehicle = await Vehicle.findByPk(vehicleId);
         if (vehicle) {
-            await vehicle.update({ plate_number, model, make, year, vehicle_price });
+            await vehicle.update({
+                plate_number,
+                model,
+                make,
+                year,
+                vehicle_price,
+                price_per_day,
+                kilometer_per_Day,
+                price_exceed_per_kilometer,
+                available
+            });
             res.status(200).json(vehicle);
         } else {
             res.status(404).send({ message: 'Vehicle not found' });

@@ -13,6 +13,16 @@ router.get('/:vehicleId', async (req, res, next) => {
     }
 });
 
+router.post('/', async (req, res, next) => {
+    try {
+        const { vehicle_id, image_url } = req.body;
+        const images = await Image.create({ vehicle_id, image_url });
+        res.status(200).json(images);
+    } catch (e) {
+        res.status(400).json({ error: e.message });
+    }
+});
+
 // upload image
 router.post('/upload-image', protect, uploadImage);
 
